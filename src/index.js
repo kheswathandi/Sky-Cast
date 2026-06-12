@@ -76,6 +76,49 @@ function displayWeather(response) {
   document.querySelector("#results").classList.remove("hidden");
 }
 
+function displayForecast(response) {
+  const forecastEl = document.querySelector("#forecast");
+  const daily = response.data.daily;
+
+  // Skip index 0 (today) and show the next 5 days
+  forecastEl.innerHTML = daily
+    .slice(1, 6)
+    .map(function (day) {
+      const date = new Date(day.time * 1000);
+      const dayName = shortDays[date.getDay()];
+      const high = Math.round(day.temperature.maximum);
+      const low = Math.round(day.temperature.minimum);
+      const icon = day.condition.icon_url;
+      const desc = day.condition.description;
+
+      return `
+      <div class="forecast-card">
+        <p class="forecast-day">${dayName}</p>
+        <img class="forecast-icon" src="${icon}" alt="${desc}" />
+        <p class="forecast-high">${high}°</p>
+        <p class="forecast-low">${low}°</p>
+      </div>
+    `;
+    })
+    .join("");
+}
+
+function searchCity(city) {
+  document.querySelector("#city").textContent = "Loading...";
+
+  const currentUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+  const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}`;
+
+  // Fetch current weather and forecast in parallel
+  return Promise.all([
+    axios.get(currentUrl).then(displayWeather),
+    axios.get(forecastUrl).then(displayForecast),
+  ]).catch(function () {
+    document.querySelector("#city").textContent = "—";
+    alert("City not found. Please try another city.");
+  });
+}
+
 function searchCity(city) {
   document.querySelector("#city").textContent = "Loading...";
   const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
@@ -198,3 +241,4 @@ document.querySelector("#theme-toggle").addEventListener("click", function () {
 });
  
 initTheme();
+searchCity("Durban");
