@@ -10,7 +10,45 @@
   --accent-hover: #87d3fc;
   --btn-bg: rgba(148, 211, 241, 0.15);
   --btn-border: rgba(40, 53, 58, 0.4);
+}:root,
+[data-theme="dark"] {
+  --bg-gradient-a: #0f2c4a;
+  --bg-gradient-b: #1a4a72;
+  --bg-gradient-c: #2e7ab6;
+  --card-bg: rgba(255, 255, 255, 0.07);
+  --card-border: rgba(255, 255, 255, 0.15);
+  --text-primary: #f0f6ff;
+  --text-muted: rgba(200, 220, 255, 0.65);
+  --accent: #5bc4f5;
+  --accent-hover: #82d4ff;
+  --btn-bg: rgba(91, 196, 245, 0.15);
+  --btn-border: rgba(91, 196, 245, 0.4);
+  --dot-color: rgba(255, 255, 255, 0.08);
+  --toggle-bg: rgba(255, 255, 255, 0.1);
+  --toggle-border: rgba(255, 255, 255, 0.2);
+  --icon-dark-display: inline;
+  --icon-light-display: none;
 }
+/* ── Light mode ── */
+[data-theme="light"] {
+  --bg-gradient-a: #bde0f5;
+  --bg-gradient-b: #d6eefb;
+  --bg-gradient-c: #eaf6ff;
+  --card-bg: rgba(255, 255, 255, 0.55);
+  --card-border: rgba(100, 170, 220, 0.3);
+  --text-primary: #0d2a42;
+  --text-muted: rgba(30, 80, 130, 0.6);
+  --accent: #1a7bbf;
+  --accent-hover: #1260a0;
+  --btn-bg: rgba(26, 123, 191, 0.1);
+  --btn-border: rgba(26, 123, 191, 0.35);
+  --dot-color: rgba(0, 80, 150, 0.06);
+  --toggle-bg: rgba(26, 123, 191, 0.1);
+  --toggle-border: rgba(26, 123, 191, 0.3);
+  --icon-dark-display: none;
+  --icon-light-display: inline;
+}
+
 *,
 *::before,
 *::after {
