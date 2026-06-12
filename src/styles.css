@@ -96,8 +96,6 @@ body {
   justify-content: center;
   padding: 2rem 1rem;
 }
-
-/* subtle star-like noise overlay */
 body::before {
   content: "";
   position: fixed;
