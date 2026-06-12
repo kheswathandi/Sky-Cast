@@ -1,0 +1,183 @@
+const apiKey = "8b8ce6ffa7c5f347d962do7b74bc0tb0";
+
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+function formatDate(timestamp) {
+  const date = new Date(timestamp);
+  const day = days[date.getDay()];
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${day} ${hours}:${minutes}`;
+}
+
+function weatherMood(description) {
+  const d = description.toLowerCase();
+  if (d.includes("thunder") || d.includes("storm"))
+    return "Stay safe and indoors ⛈️";
+  if (d.includes("rain") || d.includes("drizzle"))
+    return "Take an umbrella today ☔";
+  if (d.includes("snow")) return "Bundle up, it's snowy! ❄️";
+  if (d.includes("fog") || d.includes("mist"))
+    return "Drive carefully in the fog 🌫️";
+  if (d.includes("cloud")) return "A cozy cloudy day ☁️";
+  if (d.includes("clear") || d.includes("sunny"))
+    return "Perfect weather for a walk 🌞";
+  return "Have a wonderful day ✨";
+}
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "☀️ Good Morning";
+  if (hour < 18) return "🌤️ Good Afternoon";
+  return "🌙 Good Evening";
+}
+
+function setLoading(isLoading) {
+  const cityInput = document.querySelector("#city-input");
+  const submitBtn = document.querySelector("#search-btn");
+  const locationBtn = document.querySelector("#location-btn");
+  cityInput.disabled = isLoading;
+  submitBtn.disabled = isLoading;
+  locationBtn.disabled = isLoading;
+  locationBtn.textContent = isLoading ? "Locating…" : "location_on";
+}
+
+function displayWeather(response) {
+  const weather = response.data;
+  document.querySelector("#city").textContent = weather.city;
+  document.querySelector("#temperature").textContent = Math.round(
+    weather.temperature.current,
+  );
+  document.querySelector("#description").textContent =
+    weather.condition.description;
+  document.querySelector("#humidity").textContent =
+    `${weather.temperature.humidity}%`;
+  document.querySelector("#wind").textContent =
+    `${Math.round(weather.wind.speed)} km/h`;
+  document.querySelector("#date-time").textContent = formatDate(
+    weather.time * 1000,
+  );
+  document.querySelector("#weather-mood").textContent = weatherMood(
+    weather.condition.description,
+  );
+
+  const icon = document.querySelector("#icon");
+  icon.src = weather.condition.icon_url;
+  icon.alt = weather.condition.description;
+
+  document.querySelector("#results").classList.remove("hidden");
+}
+
+function searchCity(city) {
+  document.querySelector("#city").textContent = "Loading...";
+  const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+  return axios
+    .get(apiUrl)
+    .then(displayWeather)
+    .catch(function () {
+      document.querySelector("#city").textContent = "—";
+      alert("City not found. Please try another city.");
+    });
+}
+
+function searchByCoordinates(lat, lon) {
+  document.querySelector("#city").textContent = "Locating...";
+
+  // Use high-accuracy zoom=10 so Nominatim returns city-level info, not street-level
+  const geocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1&zoom=10`;
+
+  return axios
+    .get(geocodeUrl, { headers: { "Accept-Language": "en" } })
+    .then(function (response) {
+      const address = response.data.address;
+
+      // Try fields from most to least specific — covers SA cities, towns & suburbs
+      const city =
+        address.city ||
+        address.town ||
+        address.municipality ||
+        address.city_district ||
+        address.village ||
+        address.suburb ||
+        address.state_district ||
+        address.county;
+
+      if (!city) throw new Error("No city found in geocode response.");
+
+      // Show the detected city in the input box — user can correct it if wrong
+      const cityInput = document.querySelector("#city-input");
+      cityInput.value = city;
+
+      return searchCity(city);
+    })
+    .catch(function (err) {
+      console.error("Geocode error:", err);
+      document.querySelector("#city").textContent = "—";
+      alert(
+        "Could not detect your city automatically.\n" +
+          "Tip: Your browser may be using your IP instead of GPS.\n" +
+          "Please type your city name manually.",
+      );
+    });
+}
+
+function handleSubmit(event) {
+  event.preventDefault();
+  const cityInput = document.querySelector("#city-input");
+  const city = cityInput.value.trim();
+  if (!city) {
+    alert("Please enter a city name.");
+    return;
+  }
+  setLoading(true);
+  searchCity(city).finally(() => setLoading(false));
+}
+
+function handleLocation() {
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser.");
+    return;
+  }
+  setLoading(true);
+  navigator.geolocation.getCurrentPosition(
+    function (position) {
+      const { latitude, longitude } = position.coords;
+      searchByCoordinates(latitude, longitude).finally(() => setLoading(false));
+    },
+    function (error) {
+      setLoading(false);
+      if (error.code === error.PERMISSION_DENIED) {
+        alert(
+          "Location access was denied. Please allow it in your browser settings and try again.",
+        );
+      } else {
+        alert(
+          "Unable to retrieve your location. Please try searching manually.",
+        );
+      }
+    },
+    // Request high accuracy GPS rather than IP-based location
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+  );
+}
+
+function updateGreeting() {
+  document.querySelector("#greeting").textContent = getGreeting();
+}
+updateGreeting();
+setInterval(updateGreeting, 60000);
+
+document.querySelector("#search-form").addEventListener("submit", handleSubmit);
+document
+  .querySelector("#location-btn")
+  .addEventListener("click", handleLocation);
+
+searchCity("Durban");
