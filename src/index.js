@@ -91,7 +91,6 @@ function searchCity(city) {
 function searchByCoordinates(lat, lon) {
   document.querySelector("#city").textContent = "Locating...";
 
-  // Use high-accuracy zoom=10 so Nominatim returns city-level info, not street-level
   const geocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1&zoom=10`;
 
   return axios
@@ -99,7 +98,6 @@ function searchByCoordinates(lat, lon) {
     .then(function (response) {
       const address = response.data.address;
 
-      // Try fields from most to least specific — covers SA cities, towns & suburbs
       const city =
         address.city ||
         address.town ||
@@ -112,7 +110,6 @@ function searchByCoordinates(lat, lon) {
 
       if (!city) throw new Error("No city found in geocode response.");
 
-      // Show the detected city in the input box — user can correct it if wrong
       const cityInput = document.querySelector("#city-input");
       cityInput.value = city;
 
