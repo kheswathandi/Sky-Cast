@@ -177,4 +177,24 @@ document
   .querySelector("#location-btn")
   .addEventListener("click", handleLocation);
 
-searchCity("Durban");
+searchCity("Durban");function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+}
+ 
+function initTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved) {
+    applyTheme(saved);
+  } else {
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(prefersDark ? "dark" : "light");
+  }
+}
+ 
+document.querySelector("#theme-toggle").addEventListener("click", function () {
+  const current = document.documentElement.getAttribute("data-theme");
+  applyTheme(current === "dark" ? "light" : "dark");
+});
+ 
+initTheme();

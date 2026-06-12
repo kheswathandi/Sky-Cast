@@ -31,22 +31,25 @@
 }
 /* ── Light mode ── */
 [data-theme="light"] {
-  --bg-gradient-a: #bde0f5;
-  --bg-gradient-b: #d6eefb;
+  --bg-gradient-a: #4d94c0;
+  --bg-gradient-b: #89adc0;
   --bg-gradient-c: #eaf6ff;
-  --card-bg: rgba(255, 255, 255, 0.55);
+  --card-bg: rgba(245, 251, 255, 0.911);
   --card-border: rgba(100, 170, 220, 0.3);
-  --text-primary: #0d2a42;
-  --text-muted: rgba(30, 80, 130, 0.6);
+  --text-primary: #275377;
+  --text-muted: rgba(96, 108, 119, 0.6);
   --accent: #1a7bbf;
   --accent-hover: #1260a0;
   --btn-bg: rgba(26, 123, 191, 0.1);
   --btn-border: rgba(26, 123, 191, 0.35);
-  --dot-color: rgba(0, 80, 150, 0.06);
+  --dot-color: rgba(214, 222, 229, 0.06);
   --toggle-bg: rgba(26, 123, 191, 0.1);
-  --toggle-border: rgba(26, 123, 191, 0.3);
+  --toggle-border: rgba(48, 59, 68, 0.3);
   --icon-dark-display: none;
-  --icon-light-display: inline;
+  --icon-light-display: inline; --sky-top: #e8ebef;
+  --sky-mid: #73a2e4;
+  --sky-glow: #eef3f7;
+
 }
 theme-toggle {
   background: var(--toggle-bg);
