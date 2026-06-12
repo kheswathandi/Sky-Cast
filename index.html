@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="weather-app">
+      <header>
+        <h1 id="greeting"></h1>
+        <form id="search-form">
+          <div class="search-bar">
+            <input
+              type="text"
+              id="city-input"
+              placeholder="Search a city..."
+              autocomplete="off"
+            />
+            <button type="submit" id="search-btn">search</button>
+            <button type="button" id="location-btn">
+              <span class="material-symbols-outlined">location_on</span>
+            </button>
+          </div>
+        </form>
+      </header>
+
+      <main id="results">
+        <h2 id="city">Durban</h2>
+        <p id="date-time"></p>
+
+        <div class="weather-display">
+          <img id="icon" alt="" />
+          <div class="temperature">
+            <span id="temperature"></span><span class="degree">°C</span>
+          </div>
+        </div>
+
+        <p id="description"></p>
+        <p id="weather-mood"></p>
+
+        <div class="weather-details">
+          <span>💧 Humidity: <strong id="humidity"></strong></span>
+          <span>🌬️ Wind: <strong id="wind"></strong></span>
+        </div>
+      </main>
+      <br />
+      <hr />
+
+      <footer>
+        <p>
+          This project was coded by
+          <a
+            href="https://www.linkedin.com/in/thandiwe-kheswa-1089a8357"
+            target="_blank"
+            >Thandiwe Kheswa</a
+          >
+          and is <a href="  " target="_blank"> on GitHub</a> and
+          <a href="   " target="_blank">hosted on Netlify</a>
+        </p>
+      </footer>
+    </div>
+</body>
+</html>
