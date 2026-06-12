@@ -47,7 +47,7 @@ function setLoading(isLoading) {
   cityInput.disabled = isLoading;
   submitBtn.disabled = isLoading;
   locationBtn.disabled = isLoading;
-  locationBtn.textContent = isLoading ? "Locating…" : "location_on";
+  
 }
 
 function displayWeather(response) {
