@@ -1,15 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-/* ══════════════════════════════════════
-   THEME VARIABLES
-   ══════════════════════════════════════ */
-
-/* ── Dark mode (default) ── */
 :root,
 [data-theme="dark"] {
-  --bg-gradient-a: #0f2c4a;
-  --bg-gradient-b: #1a4a72;
-  --bg-gradient-c: #2e7ab6;
+  --bg-gradient-a: #08182a;
+  --bg-gradient-b: #183751;
+  --bg-gradient-c: #2c4f69;
   --card-bg: rgba(255, 255, 255, 0.07);
   --card-border: rgba(255, 255, 255, 0.15);
   --text-primary: #f0f6ff;
@@ -49,25 +43,17 @@
   --details-bg: rgba(255, 255, 255, 0.45);
 }
 
-/* ══════════════════════════════════════
-   RESET
-   ══════════════════════════════════════ */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ══════════════════════════════════════
-   BODY & BACKGROUND
-   ══════════════════════════════════════ */
 body {
   min-height: 100vh;
-  /* FIX: was missing comma between font name and fallback */
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   color: var(--text-primary);
-  /* FIX: now uses --bg-gradient-* so background actually changes on theme switch */
   background: linear-gradient(
     160deg,
     var(--bg-gradient-a) 0%,
@@ -86,16 +72,12 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  /* FIX: was hardcoded rgba — now uses var(--dot-color) so dots adapt to light mode */
   background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
   background-size: 32px 32px;
   pointer-events: none;
   transition: background-image 0.4s ease;
 }
 
-/* ══════════════════════════════════════
-   APP CARD
-   ══════════════════════════════════════ */
 .weather-app {
   position: relative;
   width: 100%;
@@ -115,9 +97,6 @@ body::before {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ══════════════════════════════════════
-   HEADER
-   ══════════════════════════════════════ */
 header {
   margin-bottom: 2rem;
 }
@@ -125,6 +104,7 @@ header {
 hr {
   opacity: 12%;
   margin-bottom: 1rem;
+  
 }
 
 footer {
@@ -142,19 +122,18 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* ── Greeting ── */
 #greeting {
   font-family: "Syne", sans-serif;
-  font-size: 1rem;
+  font-size: 1.5em;
   font-weight: 400;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: 1rem;
+  margin-top: 1rem;
+  text-align: center;
 }
 
-/* ── Theme toggle ── */
-/* FIX: was "theme-toggle {" — missing # so styles never applied */
 #theme-toggle {
   background: var(--toggle-bg);
   border: 1px solid var(--toggle-border);
@@ -183,7 +162,7 @@ footer a:hover {
 .icon-dark  { display: var(--icon-dark-display); }
 .icon-light { display: var(--icon-light-display); }
 
-/* ── Search bar ── */
+
 .search-bar {
   display: flex;
   gap: 8px;
@@ -193,7 +172,6 @@ footer a:hover {
 #city-input {
   flex: 1;
   min-width: 0;
-  /* FIX: now uses --input-bg variable so it adapts in light mode */
   background: var(--input-bg);
   border: 1px solid var(--card-border);
   border-radius: 12px;
@@ -260,9 +238,6 @@ footer a:hover {
   vertical-align: middle;
 }
 
-/* ══════════════════════════════════════
-   MAIN / WEATHER DISPLAY
-   ══════════════════════════════════════ */
 main {
   animation: fadeUp 0.5s 0.15s ease both;
 }
@@ -342,14 +317,11 @@ main {
   margin-bottom: 1.75rem;
 }
 
-/* ══════════════════════════════════════
-   WEATHER DETAILS
-   ══════════════════════════════════════ */
 .weather-details {
   display: flex;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  /* FIX: now uses --details-bg variable so it adapts in light mode */
+  
   background: var(--details-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
@@ -371,9 +343,7 @@ main {
   margin-top: 2px;
 }
 
-/* ══════════════════════════════════════
-   FORECAST
-   ══════════════════════════════════════ */
+
 .forecast-section {
   margin-top: 1.75rem;
 }
@@ -443,15 +413,13 @@ main {
   color: var(--text-muted);
 }
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════ */
+
 @media (max-width: 480px) {
   .weather-app {
     padding: 1.75rem 1.5rem 2rem;
     border-radius: 20px;
   }
-  /* FIX: was "3.5" — missing rem unit so font size had no effect */
+
   .temperature { font-size: 3.5rem; }
   #city        { font-size: 2rem; }
   .search-bar  { flex-wrap: wrap; }
