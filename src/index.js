@@ -1,12 +1,10 @@
 const apiKey = "8b8ce6ffa7c5f347d962do7b74bc0tb0";
 const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+  "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",
+];
+
+const shortDays = [
+  "Sun","Mon","Tue","Wed","Thu","Fri","Sat",
 ];
 
 function formatDate(timestamp) {
@@ -46,7 +44,6 @@ function setLoading(isLoading) {
   cityInput.disabled = isLoading;
   submitBtn.disabled = isLoading;
   locationBtn.disabled = isLoading;
-  
 }
 
 function displayWeather(response) {
@@ -79,7 +76,6 @@ function displayForecast(response) {
   const forecastEl = document.querySelector("#forecast");
   const daily = response.data.daily;
 
-  // Skip index 0 (today) and show the next 5 days
   forecastEl.innerHTML = daily
     .slice(1, 6)
     .map(function (day) {
@@ -91,24 +87,24 @@ function displayForecast(response) {
       const desc = day.condition.description;
 
       return `
-      <div class="forecast-card">
-        <p class="forecast-day">${dayName}</p>
-        <img class="forecast-icon" src="${icon}" alt="${desc}" />
-        <p class="forecast-high">${high}°</p>
-        <p class="forecast-low">${low}°</p>
-      </div>
-    `;
+        <div class="forecast-card">
+          <p class="forecast-day">${dayName}</p>
+          <img class="forecast-icon" src="${icon}" alt="${desc}" />
+          <p class="forecast-high">${high}°</p>
+          <p class="forecast-low">${low}°</p>
+        </div>
+      `;
     })
     .join("");
 }
 
+// ── Single searchCity — fetches current + forecast in parallel ──
 function searchCity(city) {
   document.querySelector("#city").textContent = "Loading...";
 
   const currentUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
   const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}`;
 
-  // Fetch current weather and forecast in parallel
   return Promise.all([
     axios.get(currentUrl).then(displayWeather),
     axios.get(forecastUrl).then(displayForecast),
@@ -140,9 +136,7 @@ function searchByCoordinates(lat, lon) {
 
       if (!city) throw new Error("No city found in geocode response.");
 
-      const cityInput = document.querySelector("#city-input");
-      cityInput.value = city;
-
+      document.querySelector("#city-input").value = city;
       return searchCity(city);
     })
     .catch(function (err) {
@@ -191,7 +185,6 @@ function handleLocation() {
         );
       }
     },
-    // Request high accuracy GPS rather than IP-based location
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
   );
 }
@@ -203,15 +196,14 @@ updateGreeting();
 setInterval(updateGreeting, 60000);
 
 document.querySelector("#search-form").addEventListener("submit", handleSubmit);
-document
-  .querySelector("#location-btn")
-  .addEventListener("click", handleLocation);
+document.querySelector("#location-btn").addEventListener("click", handleLocation);
 
-searchCity("Durban");function applyTheme(theme) {
+// ── Theme toggle ──
+function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
 }
- 
+
 function initTheme() {
   const saved = localStorage.getItem("theme");
   if (saved) {
@@ -221,10 +213,13 @@ function initTheme() {
     applyTheme(prefersDark ? "dark" : "light");
   }
 }
- 
+
 document.querySelector("#theme-toggle").addEventListener("click", function () {
   const current = document.documentElement.getAttribute("data-theme");
   applyTheme(current === "dark" ? "light" : "dark");
 });
- 
+
 initTheme();
+
+// ── Load on start ──
+searchCity("Durban");
