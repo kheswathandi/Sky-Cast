@@ -1,5 +1,4 @@
 const apiKey = "8b8ce6ffa7c5f347d962do7b74bc0tb0";
-
 const days = [
   "Sunday",
   "Monday",
@@ -119,18 +118,6 @@ function searchCity(city) {
   });
 }
 
-function searchCity(city) {
-  document.querySelector("#city").textContent = "Loading...";
-  const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
-  return axios
-    .get(apiUrl)
-    .then(displayWeather)
-    .catch(function () {
-      document.querySelector("#city").textContent = "—";
-      alert("City not found. Please try another city.");
-    });
-}
-
 function searchByCoordinates(lat, lon) {
   document.querySelector("#city").textContent = "Locating...";
 
@@ -241,4 +228,3 @@ document.querySelector("#theme-toggle").addEventListener("click", function () {
 });
  
 initTheme();
-searchCity("Durban");
