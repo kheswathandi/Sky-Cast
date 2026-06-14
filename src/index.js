@@ -1,6 +1,6 @@
 const apiKey = "8b8ce6ffa7c5f347d962do7b74bc0tb0";
 const days = [
-  "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",
+  "Sunday,","Monday,","Tuesday,","Wednesday,","Thursday,","Friday,","Saturday,",
 ];
 
 const shortDays = [
@@ -98,7 +98,6 @@ function displayForecast(response) {
     .join("");
 }
 
-// ── Single searchCity — fetches current + forecast in parallel ──
 function searchCity(city) {
   document.querySelector("#city").textContent = "Loading...";
 
@@ -198,7 +197,6 @@ setInterval(updateGreeting, 60000);
 document.querySelector("#search-form").addEventListener("submit", handleSubmit);
 document.querySelector("#location-btn").addEventListener("click", handleLocation);
 
-// ── Theme toggle ──
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
@@ -221,5 +219,4 @@ document.querySelector("#theme-toggle").addEventListener("click", function () {
 
 initTheme();
 
-// ── Load on start ──
 searchCity("Durban");
