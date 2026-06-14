@@ -1,16 +1,11 @@
-:root {
-  --sky-top: #0e2135;
-  --sky-mid: #0c141c;
-  --sky-glow: #153249;
-  --card-bg: rgba(255, 255, 255, 0.07);
-  --card-border: rgba(255, 255, 255, 0.15);
-  --text-primary: #f1f2f4;
-  --text-muted: rgba(242, 243, 245, 0.93);
-  --accent: #93bbce;
-  --accent-hover: #87d3fc;
-  --btn-bg: rgba(148, 211, 241, 0.15);
-  --btn-border: rgba(40, 53, 58, 0.4);
-}:root,
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ══════════════════════════════════════
+   THEME VARIABLES
+   ══════════════════════════════════════ */
+
+/* ── Dark mode (default) ── */
+:root,
 [data-theme="dark"] {
   --bg-gradient-a: #0f2c4a;
   --bg-gradient-b: #1a4a72;
@@ -28,13 +23,16 @@
   --toggle-border: rgba(255, 255, 255, 0.2);
   --icon-dark-display: inline;
   --icon-light-display: none;
+  --input-bg: rgba(255, 255, 255, 0.08);
+  --details-bg: rgba(255, 255, 255, 0.06);
 }
+
 /* ── Light mode ── */
 [data-theme="light"] {
   --bg-gradient-a: #4d94c0;
   --bg-gradient-b: #89adc0;
   --bg-gradient-c: #eaf6ff;
-  --card-bg: rgba(245, 251, 255, 0.911);
+  --card-bg: rgba(245, 251, 255, 0.91);
   --card-border: rgba(100, 170, 220, 0.3);
   --text-primary: #275377;
   --text-muted: rgba(96, 108, 119, 0.6);
@@ -42,73 +40,62 @@
   --accent-hover: #1260a0;
   --btn-bg: rgba(26, 123, 191, 0.1);
   --btn-border: rgba(26, 123, 191, 0.35);
-  --dot-color: rgba(214, 222, 229, 0.06);
+  --dot-color: rgba(0, 80, 150, 0.06);
   --toggle-bg: rgba(26, 123, 191, 0.1);
   --toggle-border: rgba(48, 59, 68, 0.3);
   --icon-dark-display: none;
-  --icon-light-display: inline; --sky-top: #e8ebef;
-  --sky-mid: #73a2e4;
-  --sky-glow: #eef3f7;
-
+  --icon-light-display: inline;
+  --input-bg: rgba(255, 255, 255, 0.65);
+  --details-bg: rgba(255, 255, 255, 0.45);
 }
-theme-toggle {
-  background: var(--toggle-bg);
-  border: 1px solid var(--toggle-border);
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-}
- 
-#theme-toggle:hover { transform: scale(1.1); }
-#theme-toggle:active { transform: scale(0.95); }
- 
-.icon-dark  { display: var(--icon-dark-display); }
-.icon-light { display: var(--icon-light-display); }
 
-*,
-*::before,
-*::after {
+/* ══════════════════════════════════════
+   RESET
+   ══════════════════════════════════════ */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
+/* ══════════════════════════════════════
+   BODY & BACKGROUND
+   ══════════════════════════════════════ */
 body {
   min-height: 100vh;
-  font-family: "Roboto" sans-serif;
+  /* FIX: was missing comma between font name and fallback */
+  font-family: "Roboto", sans-serif;
   font-weight: 400;
   color: var(--text-primary);
+  /* FIX: now uses --bg-gradient-* so background actually changes on theme switch */
   background: linear-gradient(
     160deg,
-    var(--sky-top) 0%,
-    var(--sky-mid) 50%,
-    var(--sky-glow) 100%
+    var(--bg-gradient-a) 0%,
+    var(--bg-gradient-b) 50%,
+    var(--bg-gradient-c) 100%
   );
   background-attachment: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem 1rem;
+  transition: background 0.4s ease, color 0.4s ease;
 }
+
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.08) 1px,
-    transparent 1px
-  );
+  /* FIX: was hardcoded rgba — now uses var(--dot-color) so dots adapt to light mode */
+  background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
   background-size: 32px 32px;
   pointer-events: none;
+  transition: background-image 0.4s ease;
 }
 
-/* ── App card ── */
+/* ══════════════════════════════════════
+   APP CARD
+   ══════════════════════════════════════ */
 .weather-app {
   position: relative;
   width: 100%;
@@ -120,34 +107,42 @@ body::before {
   -webkit-backdrop-filter: blur(18px);
   padding: 2.25rem 2.5rem 2.5rem;
   animation: fadeUp 0.6s ease both;
-}
-.material-symbols-outlined {
-  font-size: 1.2rem;
-  color: var(--accent);
+  transition: background 0.4s ease, border-color 0.4s ease;
 }
 
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ══════════════════════════════════════
+   HEADER
+   ══════════════════════════════════════ */
 header {
   margin-bottom: 2rem;
 }
+
 hr {
   opacity: 12%;
   margin-bottom: 1rem;
 }
-footer{
-  color:#a5c8e8;
+
+footer {
+  color: #a5c8e8;
+  font-size: 0.85rem;
+  text-align: center;
 }
 
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── Greeting ── */
 #greeting {
   font-family: "Syne", sans-serif;
   font-size: 1rem;
@@ -158,6 +153,37 @@ footer{
   margin-bottom: 1rem;
 }
 
+/* ── Theme toggle ── */
+/* FIX: was "theme-toggle {" — missing # so styles never applied */
+#theme-toggle {
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+#theme-toggle:hover {
+  background: rgba(91, 196, 245, 0.28);
+  transform: scale(1.05);
+}
+
+[data-theme="light"] #theme-toggle:hover {
+  background: rgba(26, 123, 191, 0.2);
+}
+
+#theme-toggle:active { transform: scale(0.95); }
+
+.icon-dark  { display: var(--icon-dark-display); }
+.icon-light { display: var(--icon-light-display); }
+
+/* ── Search bar ── */
 .search-bar {
   display: flex;
   gap: 8px;
@@ -167,7 +193,8 @@ footer{
 #city-input {
   flex: 1;
   min-width: 0;
-  background: rgba(255, 255, 255, 0.08);
+  /* FIX: now uses --input-bg variable so it adapts in light mode */
+  background: var(--input-bg);
   border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 0.6rem 1rem;
@@ -175,18 +202,14 @@ footer{
   font-size: 0.9rem;
   color: var(--text-primary);
   outline: none;
-  transition:
-    border-color 0.2s,
-    background 0.2s;
+  transition: border-color 0.2s, background 0.2s, color 0.3s;
 }
 
-#city-input::placeholder {
-  color: var(--text-muted);
-}
+#city-input::placeholder { color: var(--text-muted); }
 
 #city-input:focus {
   border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 #city-input:disabled {
@@ -206,33 +229,40 @@ footer{
   padding: 0.6rem 1rem;
   cursor: pointer;
   white-space: nowrap;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    transform 0.1s;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
 }
 
 .search-bar button:hover {
-  background: rgba(199, 220, 230, 0.28);
+  background: rgba(91, 196, 245, 0.28);
   color: var(--accent-hover);
-  padding: 0.6rem 0.85rem;
 }
 
-.search-bar button:active {
-  transform: scale(0.96);
+[data-theme="light"] .search-bar button:hover {
+  background: rgba(26, 123, 191, 0.2);
 }
+
+.search-bar button:active { transform: scale(0.96); }
 
 .search-bar button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   transform: none;
-  gap: 10px;
-  align-items: center;
 }
+
 #location-btn {
   font-size: 0.8rem;
   padding: 0.6rem 0.85rem;
 }
+
+.material-symbols-outlined {
+  font-size: 1.2rem;
+  color: var(--accent);
+  vertical-align: middle;
+}
+
+/* ══════════════════════════════════════
+   MAIN / WEATHER DISPLAY
+   ══════════════════════════════════════ */
 main {
   animation: fadeUp 0.5s 0.15s ease both;
 }
@@ -252,13 +282,14 @@ main {
   color: var(--text-muted);
   margin-bottom: 1.75rem;
 }
+
 .weather-display {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 0.75rem;
   justify-content: center;
-  margin-top: -3rem;
+  margin-top: -1rem;
 }
 
 #icon {
@@ -267,17 +298,15 @@ main {
   object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(91, 196, 245, 0.5));
   animation: float 4s ease-in-out infinite;
+}
 
+[data-theme="light"] #icon {
+  filter: drop-shadow(0 0 12px rgba(26, 123, 191, 0.35));
 }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
 }
 
 .temperature {
@@ -289,9 +318,8 @@ main {
   color: var(--text-primary);
   display: inline-flex;
   align-items: flex-start;
-
-  
 }
+
 .degree {
   font-size: 1.5rem;
   margin-left: 2px;
@@ -299,6 +327,7 @@ main {
   margin-top: 6px;
   font-weight: 400;
 }
+
 #description {
   font-size: 1rem;
   font-weight: 500;
@@ -313,13 +342,18 @@ main {
   margin-bottom: 1.75rem;
 }
 
+/* ══════════════════════════════════════
+   WEATHER DETAILS
+   ══════════════════════════════════════ */
 .weather-details {
   display: flex;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.06);
+  /* FIX: now uses --details-bg variable so it adapts in light mode */
+  background: var(--details-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
+  transition: background 0.4s ease, border-color 0.4s ease;
 }
 
 .weather-details span {
@@ -336,21 +370,16 @@ main {
   color: var(--text-primary);
   margin-top: 2px;
 }
-@media (max-width: 480px) {
-  .weather-app {
-    padding: 1.75rem 1.5rem 2rem;
-    border-radius: 20px;
-  }
-  .temperature {
-    font-size: 3.5;
-  }
-}
+
+/* ══════════════════════════════════════
+   FORECAST
+   ══════════════════════════════════════ */
 .forecast-section {
   margin-top: 1.75rem;
 }
- 
+
 .forecast-title {
-  font-family: 'Syne', sans-serif;
+  font-family: "Syne", sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -358,13 +387,13 @@ main {
   color: var(--text-muted);
   margin-bottom: 0.85rem;
 }
- 
+
 .forecast-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
 }
- 
+
 .forecast-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -376,16 +405,16 @@ main {
   gap: 4px;
   transition: background 0.2s, transform 0.2s;
 }
- 
+
 .forecast-card:hover {
   background: rgba(255, 255, 255, 0.12);
   transform: translateY(-3px);
 }
- 
+
 [data-theme="light"] .forecast-card:hover {
   background: rgba(255, 255, 255, 0.7);
 }
- 
+
 .forecast-day {
   font-size: 0.75rem;
   font-weight: 600;
@@ -393,29 +422,42 @@ main {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
- 
+
 .forecast-icon {
   width: 36px;
   height: 36px;
   object-fit: contain;
 }
- 
+
 .forecast-high {
-  font-family: 'Syne', sans-serif;
+  font-family: "Syne", sans-serif;
   font-size: 1rem;
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1;
 }
- 
+
 .forecast-low {
   font-size: 0.78rem;
   font-weight: 400;
   color: var(--text-muted);
 }
- 
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
 @media (max-width: 480px) {
+  .weather-app {
+    padding: 1.75rem 1.5rem 2rem;
+    border-radius: 20px;
+  }
+  /* FIX: was "3.5" — missing rem unit so font size had no effect */
+  .temperature { font-size: 3.5rem; }
+  #city        { font-size: 2rem; }
+  .search-bar  { flex-wrap: wrap; }
+  #location-btn, #theme-toggle { flex: 1; justify-content: center; }
   .forecast-grid { gap: 5px; }
   .forecast-card { padding: 0.6rem 0.1rem; border-radius: 12px; }
   .forecast-icon { width: 28px; height: 28px; }
-  .forecast-high { font-size: 0.9rem; }}
+  .forecast-high { font-size: 0.9rem; }
+}
